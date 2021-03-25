@@ -1,6 +1,6 @@
 const fs = require(`fs`);
 
-const CONFIG_FILE_PATH = `${ __dirname }/../../../config.json`;
+const CONFIG_FILE_PATH = `${__dirname}/../../../config.json`;
 let config = {};
 let server = {};
 
@@ -19,8 +19,8 @@ module.exports = {
     host: process.env.DATABASE_HOST || `localhost`,
     port: process.env.DATABASE_PORT || 5432,
     username: process.env.DATABASE_USERNAME || `postgres`,
-    password: process.env.DATABASE_PASSWORD || `paul`,
-    name: process.env.DATABASE_NAME || `risk`,
+    password: process.env.DATABASE_PASSWORD || `vikas003`,
+    name: process.env.DATABASE_NAME || `postgres`,
     dialect: process.env.DATABASE_DIALECT || `pg`,
     minconnections: process.env.DATABASE_MINCONNECTIONS || 2
   }

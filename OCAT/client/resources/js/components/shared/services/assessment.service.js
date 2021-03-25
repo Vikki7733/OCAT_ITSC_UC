@@ -1,15 +1,13 @@
 import axios from "axios";
-
 export class AssessmentService {
-    static async submit (assessment) {
-        try {
-            //Choose the correct method, url, and data to send in a request to the express OCAT/server/routes
-            await axios({});
+  static async submit(assessment) {
 
-            return;
-        }
-        catch (err) {
-            throw new Error(`${err.response.statusText} - ${err.response.data.message}`);
-        }
+    try {
+      console.log(assessment)
+      await axios.post('http://localhost:3000/assessment/submit', assessment);
     }
+    catch (err) {
+      throw new Error(`${err.response.statusText} - ${err.response.data.message}`);
+    }
+  }
 }
