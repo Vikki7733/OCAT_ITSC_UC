@@ -2,10 +2,6 @@ import React from "react";
 import { AssessmentService } from '../shared/services/assessment.service';
 import { useForm } from "react-hook-form";
 
-
-import { Component } from "react";
-import axios from "axios";
-import { size } from "lodash";
 export function AssessmentNew() {
 
   const divStyle = {

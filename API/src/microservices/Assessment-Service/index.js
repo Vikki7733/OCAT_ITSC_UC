@@ -15,8 +15,8 @@ exports.submit = (assessment, value, riskLevel) => {
         'deleted_at': null
       }
       //inserting assessment data into the database
-      let assesment = Assessments.forge(db).save(null, { method: 'insert' })
-      resolve(assesment);
+      let _assesment = Assessments.forge(db).save(null, { method: 'insert' })
+      resolve(_assesment);
 
     } catch (err) {
       reject();
