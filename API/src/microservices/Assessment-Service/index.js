@@ -5,7 +5,7 @@ exports.submit = (assessment, value, riskLevel) => {
       const date = new Date();
 
       let db = {
-        
+
         'cat_name': assessment.name,
         'cat_date_of_birth': assessment.date,
         'instrument': assessment.title,
@@ -18,6 +18,19 @@ exports.submit = (assessment, value, riskLevel) => {
       let _assesment = Assessments.forge(db).save(null, { method: 'insert' })
       resolve(_assesment);
 
+    } catch (err) {
+      reject();
+    }
+  });
+};
+exports.retrieve = () => {
+  return new Promise(async (resolve, reject) => { //eslint-disable-line
+    try {
+      let assesmentList = await new Assessments().where({deleted_at: null}).fetchAll().catch(function (e) {
+        console.log('error in retrieving assessments')
+        resolve(assesmentList.toJSON());
+      });
+      resolve(assesmentList.toJSON());
     } catch (err) {
       reject();
     }
