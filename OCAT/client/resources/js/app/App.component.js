@@ -6,10 +6,10 @@ import { AssessmentList } from '../components/Assessments/list';
 
 export function App() {
   return <>
-      <BrowserRouter>
+       <BrowserRouter>
         <Route path="/" component={DashboardBulletin} />
         <Route path="/assessment/new" component={AssessmentNew} />
-        {/* <Route path="/assessment/list" component={AssessmentList} /> */}
+        <Route path="/assessment/list" component={AssessmentList} />
       </BrowserRouter>
   </>;
 }

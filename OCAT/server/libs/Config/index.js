@@ -1,4 +1,4 @@
-const fs = require(`fs`);
+//const fs = require(`fs`);
 
 try {
   const configFile = fs.readFileSync(`${ __dirname }/../../../config.json`, `utf8`);
