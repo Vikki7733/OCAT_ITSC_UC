@@ -18,7 +18,7 @@ const paths = {
 gulp.task(`bootstrap_js`, cb => {
     const tasks = [
       gulp.src(paths.bootstrap_js),
-      concat(`bootstrap.js`),
+      //concat(`bootstrap.js`),
       uglify(),
       gulp.dest(`./public/js`)
     ];

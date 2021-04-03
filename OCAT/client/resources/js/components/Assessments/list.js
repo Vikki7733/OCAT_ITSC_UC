@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AssessmentService } from '../shared/services/assessment.service';
-import { useTable, useSortBy, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table';
+import { useTable, useSortBy,usePagination, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table';
 
 export function AssessmentList() {
 
@@ -122,14 +122,28 @@ export function AssessmentList() {
             getTableBodyProps,
             headerGroups,
             rows, preGlobalFilteredRows,
-            setGlobalFilter, state,
+            setGlobalFilter, 
+            page,state,
+            canPreviousPage,
+            canNextPage,
+            pageOptions,
+            pageCount,
+            gotoPage,
+            nextPage,
+            previousPage,
+            setPageSize,
+            state: { pageIndex, pageSize },
+
             prepareRow
         } = useTable({
             columns,
             data, disableSortBy: false,
-            defaultColumn
-        }, useFilters,
-            useGlobalFilter, useSortBy);
+            defaultColumn,
+            initialState: { pageIndex: 0, pageSize: 5 },
+        },
+        
+        useFilters,
+            useGlobalFilter, useSortBy,usePagination);
 
         let uniqueListkey = 0;
         const table =
@@ -168,7 +182,7 @@ export function AssessmentList() {
                             ))}
                         </thead>
                         <tbody {...getTableBodyProps()}>
-                            {rows.map((row, i) => {
+                        {page.map((row, i) => {
                                 prepareRow(row);
                                 return (
                                     <tr {...row.getRowProps()}>
@@ -183,10 +197,64 @@ export function AssessmentList() {
                             })}
                         </tbody>
                     </table>
+                    <div className="pagination">
+                    <ul className="pagination">
+                <li className="page-item" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                    <a className="page-link">First</a>
+                </li>
+                <li className="page-item" onClick={() => previousPage()} disabled={!canPreviousPage}>
+                    <a className="page-link">{'<'}</a>
+                </li>
+                <li className="page-item" onClick={() => nextPage()} disabled={!canNextPage}>
+                    <a className="page-link">{'>'}</a>
+                </li>
+                <li className="page-item" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                    <a className="page-link">Last</a>
+                </li>
+                <li>
+                    <a className="page-link">
+                        Page{' '}
+                        <strong>
+                            {pageIndex + 1} of {pageOptions.length}
+                        </strong>{' '}
+                    </a>
+                </li>
+                <li>
+                    <a className="page-link">
+                        <input
+                            className="form-control"
+                            type="number"
+                            defaultValue={pageIndex + 1}
+                            onChange={e => {
+                                const page = e.target.value ? Number(e.target.value) - 1 : 0
+                                gotoPage(page)
+                            }}
+                            style={{ width: '100px', height: '20px' }}
+                        />
+                    </a>
+                </li>{' '}
+                <select
+                    className="form-control"
+                    value={pageSize}
+                    onChange={e => {
+                        setPageSize(Number(e.target.value))
+                    }}
+                    style={{ width: '120px', height: '38px' }}
+                >
+                    {[5, 10, 20, 30, 40, 50].map(pageSize => (
+                        <option key={pageSize} value={pageSize}>
+                            Show {pageSize}
+                        </option>
+                    ))}
+                </select>
+            </ul>
+      </div>
+                  
                 </div>
             </div>;
-
+  
         return table;
+        
     }
     function GlobalFilter({
         preGlobalFilteredRows,
@@ -200,7 +268,7 @@ export function AssessmentList() {
         }, 200)
 
         return (
-            <span>
+            <span style={{ display:'contents', fontFamily:'lato regular', fontSize:'larger' }}>
                 Search:{' '}
                 <input
                     className="form-control"
