@@ -42,4 +42,23 @@ module.exports = server => {
       }
     }
   );
+
+  server.get(
+    `${ BASE_URL }/retrieve`,
+    async (req, res, next) => {
+      try {
+        const assessmentList = await AssessmentService.retrieve();
+
+        ResponseHandler(
+          res,
+          'Retrieved Assessments successfully',
+          assessmentList,
+          next
+        );
+      } catch (err) {
+        console.log(err)
+        next(err);
+      }
+    }
+  );
 };

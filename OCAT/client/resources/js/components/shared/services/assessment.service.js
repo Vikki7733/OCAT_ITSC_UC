@@ -10,4 +10,13 @@ export class AssessmentService {
       throw new Error(`${err.response.statusText} - ${err.response.data.message}`);
     }
   }
+  static async retrieveAll() {
+    try {
+        const assessments = await axios.get('http://localhost:4567/api/assessment/retrieve');
+        return assessments;
+    }
+    catch (err) {
+        throw new Error(`${err.response.statusText} - ${err.response.data.message}`);
+    }
+}
 }
