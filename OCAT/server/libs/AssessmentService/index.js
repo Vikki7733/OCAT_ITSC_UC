@@ -5,7 +5,7 @@ const config = require(`../Config`);
 
 exports.submit = (assessment) => {
   return new Promise((resolve, reject) => {
-    console.log('config',config);
+    
     //supply the correct uri and method here
     const options = {
       
