@@ -27,7 +27,7 @@ exports.retrieve = () => {
   return new Promise(async (resolve, reject) => { //eslint-disable-line
     try {
       let assesmentList = await new Assessments().where({deleted_at: null}).fetchAll().catch(function (e) {
-        console.log('error in retrieving assessments')
+     
         resolve(assesmentList.toJSON());
       });
       resolve(assesmentList.toJSON());
