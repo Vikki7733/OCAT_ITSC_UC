@@ -30,6 +30,7 @@ export function AssessmentNew() {
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = async (assessment) => {
     await AssessmentService.submit(assessment);
+    window.location.reload(1050000);
   };
 
   //Creating assessment form
@@ -38,20 +39,13 @@ export function AssessmentNew() {
     <div className="container">
       <div className="row justify-content-md-left">
         <div className="col-12 col-md-10">
-        {/* <div
-  aria-live="polite"
-  aria-atomic="true"
-  style={{
-    position: 'relative',
-    minHeight: '100px',
-  }}
-> */}
+        
   <Toast
     style={{
       position: 'absolute',
       top: 0,
       right: 0,
-      width:200
+      width:300
       
     }}
     onClose={() => setShow(false)} show={show} delay={3000} autohide
