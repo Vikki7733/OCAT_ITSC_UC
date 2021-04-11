@@ -24,7 +24,14 @@ bookshelf.plugin(`bookshelf-virtuals-plugin`);
 bookshelf.plugin(require(`bookshelf-soft-delete`));
 
 const Assessments = bookshelf.Model.extend({
-  tableName: `assessments`
+  tableName: `assessments`,
+  
+});
+const Users = bookshelf.Model.extend({
+  tableName: `users`,
+  requireFetch: false
 });
 
 exports.Assessments = Assessments;
+exports.Users = Users;
+

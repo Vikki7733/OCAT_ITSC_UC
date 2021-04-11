@@ -4,9 +4,15 @@ const { ErrorHandler } = require(`../../utils`);
 const { AssessmentSubmitRoute } = require(`../../utils`);
 
 router.post(`/submit`, (req, res) => {
-    AssessmentService.submit(req.body);
+    if(req.session && req.session.isLoggedIn){
+        AssessmentService.submit(req.body).then((response) => {
+            res.send(response.body.data)        
+         });
+    }
 });
 router.get(`/retrieve`, (req, res) => {
+    //Only supervisors can view assessment list
+    if(req.session && req.session.isSupervisor)
     AssessmentService.retrieve().then((response) => {
          res.send(response.body.data)        
       });
