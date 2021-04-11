@@ -7,34 +7,11 @@ export function AssessmentList() {
     const [columnsArray, setColumnsArray] = useState([]);
 
     useEffect(function fetch() {
-        (async function () {
-            const resData = await AssessmentService.retrieveAll();
-            const columnedData = []
-            resData.data.forEach(assessment => {
-
-                let dateOfBirth = Date.parse(assessment.cat_date_of_birth);
-                dateOfBirth = new Date(dateOfBirth);
-                dateOfBirth = dateOfBirth.toLocaleDateString("en-US");
-
-                let createdAt = Date.parse(assessment.created_at);
-                createdAt = new Date(createdAt);
-                createdAt = createdAt.toLocaleString("en-US");
-
-                columnedData.push(
-                    {
-                        column1: assessment.id,
-                        column2: assessment.cat_name,
-                        column3: dateOfBirth,
-                        column4: assessment.instrument,
-                        column5: assessment.risk_level,
-                        column6: assessment.score + '',
-                        column7: createdAt,
-                    })
-            });
-            setColumnsArray(columnedData);
+        (async function() {
+            updateAssessmentState();
         })();
-    }, []);
-
+    },[]);
+   
     const tableColumns = createTableColumns();
     const tableData = createTableDate();
     const table = createTable(tableColumns, tableData);
@@ -43,7 +20,7 @@ export function AssessmentList() {
     let display = columnsArray.length > 0 ? table : alternativeDisplay;
 
     return display;
-
+    
     function createTableColumns() {
         const columns = React.useMemo(
             () => [
@@ -98,6 +75,13 @@ export function AssessmentList() {
                     Filter: DefaultColumnFilter,
                     disableSortBy: true
                 },
+                {
+                    Header:'Delete a row',
+                    accessor: 'column8',
+                    Filter: DefaultColumnFilter,
+                    disableSortBy: true,
+                    headerClassName: 'visible'
+                }
             ],
             []
         );
@@ -138,13 +122,14 @@ export function AssessmentList() {
         } = useTable({
             columns,
             data, disableSortBy: false,
-            defaultColumn,
-            initialState: { pageIndex: 0, pageSize: 5 },
+            defaultColumn, 
+            initialState: { pageIndex:0, pageSize:5},
+            
         },
         
         useFilters,
             useGlobalFilter, useSortBy,usePagination);
-
+            
         let uniqueListkey = 0;
         const table =
             <div className="container">
@@ -153,7 +138,7 @@ export function AssessmentList() {
                         preGlobalFilteredRows={preGlobalFilteredRows}
                         globalFilter={state.globalFilter}
                         setGlobalFilter={setGlobalFilter}
-                    />
+    />
                     <table {...getTableProps()} style={{
                         textAlign: 'center',
                     }}  >
@@ -190,9 +175,13 @@ export function AssessmentList() {
                                             return <td {...cell.getCellProps()} style={{
                                                 padding: '10px 35px',
                                                 border: 'solid 1px gray',
-                                            }}>{cell.render("Cell")}</td>;
+                                            }}>{cell.render("Cell")} 
+                                           </td>;
+                                           
                                         })}
                                     </tr>
+                                    
+                                    
                                 );
                             })}
                         </tbody>
@@ -224,9 +213,9 @@ export function AssessmentList() {
                         <input
                             className="form-control"
                             type="number"
-                            defaultValue={pageIndex + 1}
+                            defaultValue={pageIndex+1}
                             onChange={e => {
-                                const page = e.target.value ? Number(e.target.value) - 1 : 0
+                                const page = e.target.value ? Number(e.target.value) - 1 : count
                                 gotoPage(page)
                             }}
                             style={{ width: '100px', height: '20px' }}
@@ -268,7 +257,7 @@ export function AssessmentList() {
         }, 200)
 
         return (
-            <span style={{ display:'contents', fontFamily:'lato regular', fontSize:'larger' }}>
+            <span style={{ width: '250px', fontFamily:'lato regular', fontSize:'larger', paddingBottom:'70px' }}>
                 Search:{' '}
                 <input
                     className="form-control"
@@ -277,6 +266,7 @@ export function AssessmentList() {
                         setValue(e.target.value);
                         onChange(e.target.value);
                     }}
+                  
                     placeholder={`${count} records...`}
                 />
             </span>
@@ -291,7 +281,7 @@ export function AssessmentList() {
         return (
             <input
                 className="form-control"
-                value={filterValue || ''}
+                value={filterValue || ''} 
                 onChange={e => {
                     setFilter(e.target.value || undefined)
                 }}
@@ -309,4 +299,50 @@ export function AssessmentList() {
             </div>
         );
     }
-}
+    async function  deleteAssessment(id){   
+   
+ 
+        await AssessmentService.deleteAssessment(id).then(()=>{
+            alert("Row is successfully deleted")
+            updateAssessmentState();
+        });
+
+    }
+
+    async function updateAssessmentState(){
+        const resData = await AssessmentService.retrieveAll();
+            const columnedData = []
+            resData.data.forEach(assessment => {
+
+                let dateOfBirth = Date.parse(assessment.cat_date_of_birth);
+                dateOfBirth = new Date (dateOfBirth);
+                dateOfBirth = dateOfBirth.toLocaleDateString("en-US");
+
+                let createdAt = Date.parse(assessment.created_at);
+                createdAt = new Date (createdAt);
+                createdAt = createdAt.toLocaleString("en-US");
+              
+                let btnDelete = 
+                <button 
+                    type="button"
+                    className="btn btn-danger"
+                    id ={assessment.id}
+                    onClick={deleteAssessment.bind(this, assessment.id)}
+                    >Delete</button>
+                
+                    
+                columnedData.push(
+                    {
+                        column1: assessment.id,
+                        column2: assessment.cat_name,
+                        column3: dateOfBirth,
+                        column4: assessment.instrument,
+                        column5: assessment.risk_level,
+                        column6: assessment.score+'',
+                        column7: createdAt,
+                        column8: btnDelete,
+                    })
+            });
+            setColumnsArray(columnedData);
+    }
+    }
