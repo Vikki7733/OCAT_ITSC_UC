@@ -27,5 +27,11 @@ const Assessments = bookshelf.Model.extend({
   tableName: `assessments`,
   soft: ['deleted_at']
 });
+const Users = bookshelf.Model.extend({
+  tableName: `users`,
+  requireFetch: false
+});
 
 exports.Assessments = Assessments;
+exports.Users = Users;
+

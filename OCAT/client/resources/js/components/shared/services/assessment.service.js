@@ -3,7 +3,6 @@ export class AssessmentService {
   static async submit(assessment) {
 
     try {
-      console.log(assessment)
       await axios.post('http://localhost:3000/assessment/submit', assessment);
      
     }
